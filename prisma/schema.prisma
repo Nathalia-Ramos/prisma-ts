@@ -1,0 +1,71 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Aluno {
+  id Int @id @unique @default(autoincrement())
+  
+  nome            String   @db.VarChar(80)
+  idade           Int
+
+  escola Escola @relation(fields: [idEscola], references: [id])
+  idEscola Int //declarando a chave
+
+
+
+  @@map("tbl_aluno")
+}
+model  Professores {
+  id Int @id @unique @default (autoincrement())
+
+  nome            String @db.VarChar(80)
+
+  @@map("tbl_professores")
+}
+
+model Escola {
+  id               Int @id @unique @default(autoincrement())
+
+  nome            String @db.VarChar(80)
+
+  cidade Cidade @relation(fields: [idCidade], references: [id])
+  idCidade Int
+
+  aluno Aluno[]  //Dizendo ao prisma que existe uma relação com escola e Aluno
+
+  @@map("tbl_escola")
+}
+
+model Cidade {
+  id              Int @id @unique @default(autoincrement())
+
+  nome            String @db.VarChar(80)
+  sigla           String @db.VarChar(3)
+
+  //fazendo o relacionamento entre cidade e estado
+  estado   Estado @relation(fields: [idEstado], references: [id])
+  idEstado Int //declara a chave
+
+  escola Escola[]  
+
+  @@map("tbl_cidade")
+}
+
+model Estado {
+  id              Int @id @unique @default(autoincrement())
+
+  nome            String @db.VarChar(30)
+  sigla           String @db.VarChar(3)
+
+  cidade Cidade[]
+
+  @@map("tbl_estado")
+}
+
