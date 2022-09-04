@@ -35,8 +35,8 @@ model Escola {
 
   nome            String @db.VarChar(80)
 
-  cidade Cidade @relation(fields: [idCidade], references: [id])
-  idCidade Int
+  //cidade Cidade @relation(fields: [idCidadey], references: [id])
+  //idCidade Int
 
   aluno Aluno[]  //Dizendo ao prisma que existe uma relação com escola e Aluno
 
@@ -53,7 +53,7 @@ model Cidade {
   estado   Estado @relation(fields: [idEstado], references: [id])
   idEstado Int //declara a chave
 
-  escola Escola[]  
+  //escola Escola[]  
 
   @@map("tbl_cidade")
 }
@@ -67,5 +67,6 @@ model Estado {
   cidade Cidade[]
 
   @@map("tbl_estado")
+
 }
 

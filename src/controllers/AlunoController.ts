@@ -30,4 +30,40 @@ export default class AlunoController{
             res.status(400).json({ message: "Não foi possível cadastrar um aluno!" });
         }
     }
+
+    //Listando
+   static async getAll(req:Request, res: Response){
+        const result = await prismaClient.aluno.findMany()
+    
+        try {
+            return res.status(200).json({result: result})
+        } catch (error:any) {
+            console.error(error)
+            res.status(400).json({message: "Não foi possível listar todos os alunos"})
+        }
+        
+    }
+
+    static async update (req: Request, res: Response){
+        const {id} = req.params
+        const {nome, idade, idEscola}: Aluno = req.body
+
+            await prismaClient.professores.update({
+                    
+                data:{
+                    nome,
+                    idade : Number(idade),
+                    escola: {
+                        connect: {id: idEscola}
+                    }
+                },
+                where:{
+                    id : Number(id)
+                },
+
+                })
+                res.status(201)
+                .json({message: "Aluno atualizado com sucesso!!"})   
+        
+    }
 }

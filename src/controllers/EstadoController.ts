@@ -22,4 +22,32 @@ export default class EstadoController{
             res.status(400).json({message: "Não foi possível cadastrar registro!"})
         }
     }
+
+    static async getAll(req: Request, res: Response){
+        const result = await prismaClient.estado.findMany()
+
+        try {
+            return res.status(200).json({result : result})
+        } catch (error: any) {
+            console.error(error)
+
+            res.send(400).json({message: "Não foi possível listar todos os Estados"})
+        }
+    }
+    static async update (req: Request, res: Response){
+        const {id} = req.params
+        const{nome, sigla} = req.body
+
+        await prismaClient.estado.update({
+            data:{
+                nome, 
+                sigla
+            },
+            where:{
+                id: Number(id)
+            }
+            
+        })
+        res.status(200).json({message: "Registro atualizado com sucesso!"})
+    }
 }
