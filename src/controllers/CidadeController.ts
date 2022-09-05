@@ -58,5 +58,14 @@ export default class CidadeController{
         .json({message: "Cidade atualizado com sucesso!!"})   
            
     }
+    static async CidadeEstado(req: Request, res: Response){
+        const result = await prismaClient.cidade.findMany({
+            include: {
+                estado: true
+            },
+            
+        })
+        return res.status(200).json({result : result})
+    }
 
 }

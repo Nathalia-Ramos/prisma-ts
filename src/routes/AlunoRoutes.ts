@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/', AlunoController.create)
 router.get('/', AlunoController.getAll)
-router.put('/:id', AlunoController.update)
+//router.put('/:id', AlunoController.update)
+router.get('/list', AlunoController.AlunoEscola)
 export default router

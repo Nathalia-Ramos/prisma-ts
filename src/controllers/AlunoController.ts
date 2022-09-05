@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { Aluno } from "@prisma/client";
+import { Aluno, prisma } from "@prisma/client";
 import { prismaClient } from "../database/prismaClient";
 import { PrismaClientUnknownRequestError } from "@prisma/client/runtime";
 
@@ -44,7 +44,21 @@ export default class AlunoController{
         
     }
 
-    static async update (req: Request, res: Response){
+    
+    static async AlunoEscola (req: Request, res: Response) {
+        const result = await prismaClient.aluno.findMany({
+            include: {
+                escola : true,
+
+            }
+            
+        })
+        return res.status(200).json({result : result})
+        
+      }
+
+
+    /*static async update (req: Request, res: Response){
         const {id} = req.params
         const {nome, idade, idEscola}: Aluno = req.body
 
@@ -65,5 +79,5 @@ export default class AlunoController{
                 res.status(201)
                 .json({message: "Aluno atualizado com sucesso!!"})   
         
-    }
+    }*/
 }
