@@ -8,6 +8,7 @@ router.post('/', CidadeController.create)
 router.get('/', CidadeController.getAll)
 router.get('/list',CidadeController.CidadeEstado)
 router.put('/:id', CidadeController.update)
+router.delete('/:id', CidadeController.delete)
 
 
 export default router

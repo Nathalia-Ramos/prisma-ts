@@ -63,9 +63,22 @@ export default class CidadeController{
             include: {
                 estado: true
             },
-            
         })
         return res.status(200).json({result : result})
     }
+
+    static async delete(req: Request, res: Response){
+        const {id} = req.params
+
+        const result = await prismaClient.cidade.delete({
+           
+            where:{
+               id: Number(id) 
+            }
+        })
+        return res.status(200).json({message: "Registro excluído com sucesso!"})
+    }
+
+    
 
 }

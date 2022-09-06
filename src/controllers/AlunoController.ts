@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { Aluno, prisma } from "@prisma/client";
+import { Aluno } from "@prisma/client";
 import { prismaClient } from "../database/prismaClient";
 import { PrismaClientUnknownRequestError } from "@prisma/client/runtime";
 
@@ -58,26 +58,54 @@ export default class AlunoController{
       }
 
 
-    /*static async update (req: Request, res: Response){
+      static async update(req: Request, res: Response){
         const {id} = req.params
-        const {nome, idade, idEscola}: Aluno = req.body
+        const {nome, idade, idEscola} = req.body
 
-            await prismaClient.professores.update({
-                    
-                data:{
-                    nome,
-                    idade : Number(idade),
-                    escola: {
-                        connect: {id: idEscola}
-                    }
-                },
-                where:{
-                    id : Number(id)
-                },
+        await prismaClient.aluno.update({
+            data:{
+                nome,
+                idade,
+                escola: {
+                    connect: {id: idEscola}
+                }
+            },
+            where:{
+                id : Number(id)
+            }
+        })
+        res.status(200)
+        .json({message: "Registro atualizado com sucesso!!"})   
+           
+    }
 
-                })
-                res.status(201)
-                .json({message: "Aluno atualizado com sucesso!!"})   
-        
-    }*/
+    
+    static async EstadoAluno(req: Request, res: Response){
+        const result = await prismaClient
+        .$queryRaw      `SELECT 
+                            n.id,
+                            n.nome,
+                            n.idade,
+                            n.idEscola,
+                            e.nome AS Estado,
+                            e.sigla
+                        FROM
+                            tbl_aluno n
+                        LEFT JOIN 
+                            tbl_estado e
+                        ON
+                            n.id = e.id; `
+
+        return res.status(200).json({res : result})
+    }
+    static async delete(req: Request, res: Response){
+        const {id} = req.params
+
+        await prismaClient.aluno.delete({
+            where:{
+                id: Number(id)
+            }
+        })
+        return res.status(200).json({message: "Registro excluído com sucesso!"})
+    }
 }

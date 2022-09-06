@@ -41,19 +41,29 @@ export default class ProfessoresController {
         const {id} = req.params
         const {nome}: Professores = req.body
 
-            await prismaClient.professores.update({
+        await prismaClient.professores.update({
                     
-                data:{
-                    nome 
-                },
-                where:{
-                    id : Number(id)
-                },
+            data:{
+               nome 
+            },
+            where:{
+               id : Number(id)
+            },
 
-                })
-                res.status(201)
-                .json({message: "Professor atualizado com sucesso!!"})   
+        })
+             res.status(201)
+            .json({message: "Professor atualizado com sucesso!!"})   
         
-        }
+    }
+    static async delete(req: Request, res: Response){
+        const {id} = req.params
+
+        await prismaClient.professores.delete({
+            where:{
+                id: Number(id)
+            }
+        })
+        return res.status(200).json({message: "Registro excluído com sucesso!"})
+    }
 
 }
