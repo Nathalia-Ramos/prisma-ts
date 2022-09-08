@@ -69,4 +69,10 @@ model Estado {
   @@map("tbl_estado")
 
 }
+model Imagem {
+  id              Int @id @unique @default(autoincrement())
 
+  image         String @db.VarChar(300)
+
+  @@map("tbl_imagem")
+}

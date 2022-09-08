@@ -25,7 +25,7 @@ export default class AlunoController{
             })
 
             res.status(201).json({message: "Aluno criado com sucesso"})
-        } catch (error) {
+        } catch (error : any) {
             console.error(error)
             res.status(400).json({ message: "Não foi possível cadastrar um aluno!" });
         }
