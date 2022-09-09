@@ -14,6 +14,7 @@ model Aluno {
   
   nome            String   @db.VarChar(80)
   idade           Int
+  image           String?   @db.VarChar(100)
 
   escola Escola @relation(fields: [idEscola], references: [id])
   idEscola Int //declarando a chave
@@ -68,11 +69,4 @@ model Estado {
 
   @@map("tbl_estado")
 
-}
-model Imagem {
-  id              Int @id @unique @default(autoincrement())
-
-  image         String @db.VarChar(300)
-
-  @@map("tbl_imagem")
 }

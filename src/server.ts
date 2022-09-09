@@ -1,7 +1,7 @@
 import express from "express";
 import multer  from "multer";
 
-const upload = multer({ dest: 'uploads/' })
+//const upload = multer({ dest: 'uploads/' })
 
 
 //Iniciando o app
@@ -19,14 +19,14 @@ import EscolaRoutes from "./routes/EscolaRoutes"
 import ProfessoresRoutes from    "./routes/ProfessorRoutes"
 import EstadoRoutes from "./routes/EstadoRoutes"
 import CidadeRoutes from"./routes/CidadeRoutes"
-import ImageRoutes from "./routes/ImageRoutes"
+
 
 app.use("/aluno", AlunoRoutes)
 app.use("/escola", EscolaRoutes)
 app.use("/professores", ProfessoresRoutes)
 app.use("/estado", EstadoRoutes)
 app.use("/cidade", CidadeRoutes)
-app.use("/image", ImageRoutes)
+
 
 
 app.listen(8080, () =>{

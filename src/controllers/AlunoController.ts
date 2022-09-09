@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Multer } from "multer";
 
 import { Aluno } from "@prisma/client";
 import { prismaClient } from "../database/prismaClient";
@@ -10,17 +11,18 @@ export default class AlunoController{
     static async create(req: Request, res: Response){
 
         const {nome, idade, idEscola}: Aluno = req.body
-        
-        if(!nome || !idade || !idEscola) res.status(400).json({message: "Existem campos obrigratórios que não foram preechados"})
+        let image = req.file?.path
+
+        if(!nome || !idade || !idEscola ) res.status(400).json({message: "Existem campos obrigratórios que não foram preechados"})
        
         try {
             const newAluno = await prismaClient.aluno.create({
                 data:{
                     nome,
-                    idade,
-                    escola: {
-                        connect: {id: idEscola}
-                    }
+                    idade : Number(idade),
+                    image,
+                    idEscola: Number(idEscola)
+                    
                 }
             })
 
