@@ -7,12 +7,17 @@ import AlunoController from "../controllers/AlunoController"
 
 const router = Router();
 
-router.post('/', upload.array('image', 5), AlunoController.create)
+router.post('/', upload.single('image'), AlunoController.create)
+router.post('/login', AlunoController.Login)
+router.post('/RecuperandoSenha', AlunoController.RecuperandoSenha)
+
 router.get('/', AlunoController.getAll)
 router.get('/list', AlunoController.AlunoEscola)
 router.get('/EstadoAluno', AlunoController.EstadoAluno)
+
 router.put('/:id', AlunoController.update)
 router.delete('/:id', AlunoController.delete)
+
 
 
 

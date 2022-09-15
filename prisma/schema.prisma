@@ -12,9 +12,11 @@ datasource db {
 model Aluno {
   id Int @id @unique @default(autoincrement())
   
-  nome            String   @db.VarChar(80)
+  nome            String    @db.VarChar(80)
   idade           Int
   image           String?   @db.VarChar(100)
+  email           String?   @db.VarChar(120)
+  senha           String?   @db.VarChar(60)
 
   escola Escola @relation(fields: [idEscola], references: [id])
   idEscola Int //declarando a chave
