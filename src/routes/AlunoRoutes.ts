@@ -16,9 +16,7 @@ router.get('/list', AlunoController.AlunoEscola)
 router.get('/EstadoAluno', AlunoController.EstadoAluno)
 
 router.put('/:id', AlunoController.update)
+//router.put('/editandoSenha/:id', AlunoController.updateSenha)
 router.delete('/:id', AlunoController.delete)
-
-
-
 
 export default router

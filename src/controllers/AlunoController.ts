@@ -7,6 +7,7 @@ import crypto from "crypto"
 import { Aluno } from "@prisma/client";
 import { prismaClient } from "../database/prismaClient";
 import { PrismaClientUnknownRequestError } from "@prisma/client/runtime";
+import { ParseArgsConfig } from "util";
 
 
 
@@ -68,8 +69,8 @@ export default class AlunoController{
     }
     //Recuperando senha via email
     static async RecuperandoSenha(req: Request, res: Response){
+        const {id} = req.params
         const {email}: Aluno = req.body
-        
 
         try {
 
@@ -100,15 +101,17 @@ export default class AlunoController{
                
                   bcrypt.hash(novaSenha, 8).then(
                          senha => {
-                           let id = req.params
-
+                           
+                            //atualizando no banco
                             prismaClient.aluno.update({
-                                data:{
-                                   senha 
+                                data: {
+                                    senha
                                 },
-                                where:{
-                                   id: Number(id)
+                                where: {
+                                    id : user?.id
                                 }
+
+
                             }).then(
                                 () => {
                                     return res.status(200).json({message :"E-mail enviado com sucesso"})
@@ -116,7 +119,6 @@ export default class AlunoController{
                              )
                         }
                      )
-                  
 
                 }
             )
@@ -126,9 +128,35 @@ export default class AlunoController{
         }
     }
 
+    //Editando usuário
+   /*static async updateSenha(req: Request, res: Response) {
+    
+        const {id} = req.params 
+        const {senha, novaSenha} = req.body
+    
+        try {
+   
+          //atualizando no banco
+          await prismaClient.aluno.update({
+                 data: {
+                  senha 
+                },
+               where: {
+                   id : Number(id)
+               }
 
+         })
+            res.status(200).json({message: "senha atualizada com sucesso!"})
+            
+
+        } catch (error: any) {
+            console.error(error)
+            res.status(404).json({message: "Usuário não encontrado"})
+        }
+    }
+*/
     //Listando
-   static async getAll(req:Request, res: Response){
+      static async getAll(req:Request, res: Response){
         const result = await prismaClient.aluno.findMany()
     
         try {
@@ -138,10 +166,9 @@ export default class AlunoController{
             res.status(400).json({message: "Não foi possível listar todos os alunos"})
         }
         
-    }
+     }
 
-    
-    static async AlunoEscola (req: Request, res: Response) {
+     static async AlunoEscola (req: Request, res: Response) {
         const result = await prismaClient.aluno.findMany({
             include: {
                 escola : true,
@@ -151,31 +178,38 @@ export default class AlunoController{
         })
         return res.status(200).json({result : result})
         
-      }
+     }
 
-
+     //editando a senha
       static async update(req: Request, res: Response){
+       
         const {id} = req.params
-        const {nome, idade, idEscola} = req.body
-
-        await prismaClient.aluno.update({
-            data:{
-                nome,
-                idade,
-                escola: {
-                    connect: {id: idEscola}
-                }
-            },
-            where:{
-                id : Number(id)
-            }
-        })
-        res.status(200)
-        .json({message: "Registro atualizado com sucesso!!"})   
-           
-    }
-
+        const {senha}: Aluno = req.body
+        
+       
+            try {
+                //encriptografando a senha
+                const senhaHash = await bcrypt.hash(senha as string, 8);
     
+                const updateAluno = await prismaClient.aluno.update({
+                    data:{
+        
+                        senha: senhaHash
+                    },
+                    where:{
+                        id: Number(id)
+                    }
+                
+                })
+             
+                res.status(200).json(updateAluno)
+    
+            } catch (error : any) {
+              
+                res.status(400).json({ message: "Não foi atualizar a senha!" });
+            }
+        }
+      
     static async EstadoAluno(req: Request, res: Response){
         const result = await prismaClient
         .$queryRaw      `SELECT 
